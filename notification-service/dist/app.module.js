@@ -44,6 +44,28 @@ exports.AppModule = AppModule = __decorate([
                     },
                 },
             }),
+            mailer_1.MailerModule.forRoot({
+                transport: {
+                    host: process.env.BACKUP_SMTP_HOST,
+                    port: Number(process.env.BACKUP_SMTP_PORT),
+                    secure: false,
+                    auth: {
+                        user: process.env.BACKUP_SMTP_USER,
+                        pass: process.env.BACKUP_SMTP_PASSWORD,
+                    },
+                    defaults: {
+                        from: `"No Reply" <no-reply@${process.env.BACKUP_SMTP_HOST}>`,
+                    },
+                    preview: true,
+                    template: {
+                        dir: process.cwd() + '/template/',
+                        adapter: new handlebars_adapter_1.HandlebarsAdapter(),
+                        options: {
+                            strict: true,
+                        },
+                    },
+                },
+            }),
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

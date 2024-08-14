@@ -7,6 +7,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+
 @Module({
   imports: [
     NotificationModule,
@@ -25,7 +26,29 @@ dotenv.config();
         preview: true,
         template: {
           dir: process.cwd() + '/template/',
-          adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      },
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.BACKUP_SMTP_HOST,
+        port: Number(process.env.BACKUP_SMTP_PORT),
+        secure: false,
+        auth: {
+          user: process.env.BACKUP_SMTP_USER,
+          pass: process.env.BACKUP_SMTP_PASSWORD,
+        },
+        defaults: {
+          from: `"No Reply" <no-reply@${process.env.BACKUP_SMTP_HOST}>`,
+        },
+        preview: true,
+        template: {
+          dir: process.cwd() + '/template/',
+          adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
           },
@@ -36,4 +59,4 @@ dotenv.config();
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
